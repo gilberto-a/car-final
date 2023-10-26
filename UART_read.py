@@ -30,22 +30,23 @@ def process_data(data):
         gyro_values = [int(val) / 1000 for val in gyro_part.split(', ')]
         # Store the values in separate variables
         accel_x, accel_y, accel_z = accel_values
-        gyro_x, gyro_y, gyro_z = gyro_values
-        accel_x = accel_x -ax_offset 
-        accel_y = accel_y -ay_offset 
-        accel_z = accel_z -az_offset
-        gyro_x = gyro_x - gx_offset
-        gyro_y = gyro_y - gy_offset
-        gyro_z = gyro_z - gz_offset
+        # gyro_x, gyro_y, gyro_z = gyro_values
+        # accel_x = accel_x -ax_offset 
+        # accel_y = accel_y -ay_offset 
+        # accel_z = accel_z -az_offset
+        # gyro_x = gyro_x - gx_offset
+        # gyro_y = gyro_y - gy_offset
+        # gyro_z = gyro_z - gz_offset
 
         
         # Print the values (or perform further processing as needed)
-        # print(f"Accelerometer: X={accel_x},      Y={accel_y},       Z={accel_z} ")
+        print(f"Accelerometer: X={accel_x},      Y={accel_y},       Z={accel_z} ")
         # print(f"Gyroscope: X={gyro_x}, Y={gyro_y}, Z={gyro_z}")
 
         return(accel_x, accel_y, accel_z) 
 
 def x_movement(value):
+    
     global flag 
     global forward 
     global backward 
@@ -54,22 +55,21 @@ def x_movement(value):
         forward = 1
         flag = 1 
         keyboard.press('w')
-        keyboard.release('w')
-
-
     elif (.05 < value < .07) and (forward == 1):
         flag = 0
         forward = 0
+        keyboard.release('w')
+
         
     elif  flag == 0 and value < -0.1 :
         backward = 1
         flag = 1
         keyboard.press('s')
-        keyboard.release('s')
     
     elif (.05 < value < .07) and (backward == 1) :
         flag = 0
         backward = 0
+        keyboard.release('s')
 
 
 

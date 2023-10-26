@@ -1,0 +1,25 @@
+swwsswswwswwwsssws
+
+
+
+PROBLEM: How to break while loop from continous keypress
+continuously while loop gathering data
+need to have a while loop to continously keypress button 
+while while loop is happening data isnt being gathered 
+have to continuously check value of 'value' but
+possible until function is called again. 
+might need to not have this in a function
+just have these calls happen each time the device gathers data
+while loop would still cause an issue
+
+Solution 1?
+get rid of function then,
+while flag == 1:
+    keypress of W
+    new_x, new_z = process_data(data)
+    if new_x falls between threshold:
+        keypress release
+        flag = 0
+        
+
+
