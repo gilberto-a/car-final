@@ -34,7 +34,7 @@ def process_data(data):
         print(f"Accelerometer: X={accel_x},      Y={accel_y},       Z={accel_z} ")
         # print(f"Gyroscope: X={gyro_x}, Y={gyro_y}, Z={gyro_z}")
 
-        return(accel_x, accel_z) 
+        return(accel_x, accel_y, accel_z) 
 
 
 def x_movement():
@@ -56,29 +56,30 @@ def x_movement():
         while True:
             data = ser.readline().decode('utf-8').strip()
             if data:
-                final_x, final_z = process_data(data)
+                final_x, final_y, final_z = process_data(data)
                 
-                if flag == 0 and final_x > 0.2:
+                if flag == 0 and final_y > 0.1:
                     forward = 1
                     flag = 1 
                     keyboard.press('w')
-                elif (0.05 < final_x < 0.07) and forward == 1:
+                elif (-.01 < final_y < 0.015) and forward == 1:
                     flag = 0
                     forward = 0
                     keyboard.release('w')
-                if flag == 0 and final_x < -0.1:
+                    
+                if flag == 0 and final_y < -0.1:
                     backward = 1
                     flag = 1
                     keyboard.press('s')
-                elif (0.05 < final_x < 0.07) and backward == 1:
+                elif (-.01 < final_y < 0.015) and backward == 1:
                     flag = 0
                     backward = 0
                     keyboard.release('s')
             time.sleep(0.01)  # Adjust the sleep time as needed
     except KeyboardInterrupt:
         # Ensure that the keyboard keys are released before exiting
-        # keyboard.release('w')
-        # keyboard.release('s')
+        keyboard.release('w')
+        keyboard.release('s')
         ser.close()
 
 def main():

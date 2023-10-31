@@ -14,7 +14,7 @@ while loop would still cause an issue
 
 Solution 1?
 get rid of function then,
-while flag == 1:
+while flag == 1:w
     keypress of W
     new_x, new_z = process_data(data)
     if new_x falls between threshold:

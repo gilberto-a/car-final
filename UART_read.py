@@ -2,6 +2,7 @@ import serial
 import time
 import pynput
 from pynput.keyboard import Key, Controller
+from pynput.mouse import Button, Controller as MController
 
 # ax_offset = .14208
 # ay_offset = .02292
@@ -19,6 +20,7 @@ flag = 0
 forward = 0
 backward = 0
 keyboard = Controller()
+mouse = MController()
 
 def process_data(data):
     # Split the data into accelerometer and gyroscope parts
@@ -30,7 +32,7 @@ def process_data(data):
         gyro_values = [int(val) / 1000 for val in gyro_part.split(', ')]
         # Store the values in separate variables
         accel_x, accel_y, accel_z = accel_values
-        # gyro_x, gyro_y, gyro_z = gyro_values
+        gyro_x, gyro_y, gyro_z = gyro_values
         # accel_x = accel_x -ax_offset 
         # accel_y = accel_y -ay_offset 
         # accel_z = accel_z -az_offset
@@ -40,8 +42,8 @@ def process_data(data):
 
         
         # Print the values (or perform further processing as needed)
-        print(f"Accelerometer: X={accel_x},      Y={accel_y},       Z={accel_z} ")
-        # print(f"Gyroscope: X={gyro_x}, Y={gyro_y}, Z={gyro_z}")
+        # print(f"Accelerometer: X={accel_x},      Y={accel_y},       Z={accel_z} ")
+        print(f"Gyroscope: X={gyro_x}, Y={gyro_y}, Z={gyro_z}")
 
         return(accel_x, accel_y, accel_z) 
 
@@ -51,25 +53,29 @@ def x_movement(value):
     global forward 
     global backward 
 
-    if flag == 0 and value > 0.2 :
+    if flag == 0 and value > 0.1 :
         forward = 1
         flag = 1 
         keyboard.press('w')
-    elif (.05 < value < .07) and (forward == 1):
+    elif (-.01 < value < .01) and (forward == 1):
         flag = 0
         forward = 0
         keyboard.release('w')
-
-        
     elif  flag == 0 and value < -0.1 :
         backward = 1
         flag = 1
         keyboard.press('s')
-    
-    elif (.05 < value < .07) and (backward == 1) :
+    elif (-.01 < value < .01) and (backward == 1) :
         flag = 0
         backward = 0
         keyboard.release('s')
+
+def z_movement(value):
+    if value > 1.2 :
+        mouse.click(Button.right, 1)
+
+    
+    
 
 
 
@@ -90,7 +96,8 @@ while True:
     data = ser.readline().decode('utf-8').strip()  # Assuming the data is sent as text
     if data:
         final_x, final_y, final_z = process_data(data)
-        x_movement(final_x)
+        x_movement(final_y)
+        z_movement(final_z)
         
 
 
